@@ -1,0 +1,54 @@
+object frmMain: TfrmMain
+  Left = 383
+  Height = 113
+  Top = 252
+  Width = 353
+  BorderStyle = bsSingle
+  Caption = 'LinkMate'
+  ClientHeight = 113
+  ClientWidth = 353
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  LCLVersion = '1.0.4.0'
+  object btnSend: TButton
+    Left = 272
+    Height = 33
+    Top = 72
+    Width = 75
+    Caption = 'Send'
+    OnClick = btnSendClick
+    TabOrder = 0
+  end
+  object Label1: TLabel
+    Left = 16
+    Height = 18
+    Top = 8
+    Width = 97
+    Caption = 'Computer List'
+    ParentColor = False
+  end
+  object cbxComputers: TComboBox
+    Left = 16
+    Height = 29
+    Top = 32
+    Width = 248
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'localhost'
+    )
+    OnKeyDown = cbxComputersKeyDown
+    TabOrder = 1
+    Text = 'localhost'
+  end
+  object btnDelete: TButton
+    Left = 272
+    Height = 34
+    Top = 29
+    Width = 75
+    Caption = 'Delete'
+    OnClick = btnDeleteClick
+    TabOrder = 2
+  end
+end
