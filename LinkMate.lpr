@@ -3,9 +3,11 @@ program LinkMate;
 {$mode objfpc}{$H+}
 
 uses
+  {$IFDEF UNIX}
   cthreads,
+  {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, Main
+  Forms, Main, commandserver
   { you can add units after this };
 
 {$R *.res}

@@ -1,54 +1,94 @@
 object frmMain: TfrmMain
   Left = 383
-  Height = 113
+  Height = 328
   Top = 252
-  Width = 353
+  Width = 407
   BorderStyle = bsSingle
   Caption = 'LinkMate'
-  ClientHeight = 113
-  ClientWidth = 353
+  ClientHeight = 328
+  ClientWidth = 407
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
   LCLVersion = '1.0.4.0'
-  object btnSend: TButton
-    Left = 272
-    Height = 33
-    Top = 72
+  object btnSendLink: TButton
+    Left = 325
+    Height = 29
+    Top = 288
     Width = 75
-    Caption = 'Send'
-    OnClick = btnSendClick
+    Caption = 'Send Link'
+    OnClick = btnSendLinkClick
     TabOrder = 0
   end
-  object Label1: TLabel
-    Left = 16
-    Height = 18
+  object GroupBox1: TGroupBox
+    Left = 8
+    Height = 64
     Top = 8
-    Width = 97
-    Caption = 'Computer List'
-    ParentColor = False
-  end
-  object cbxComputers: TComboBox
-    Left = 16
-    Height = 29
-    Top = 32
-    Width = 248
-    ItemHeight = 0
-    ItemIndex = 0
-    Items.Strings = (
-      'localhost'
-    )
-    OnKeyDown = cbxComputersKeyDown
+    Width = 392
+    Caption = 'Computer'
+    ClientHeight = 45
+    ClientWidth = 388
     TabOrder = 1
-    Text = 'localhost'
+    object cbxComputers: TComboBox
+      Left = 16
+      Height = 29
+      Top = 7
+      Width = 280
+      ItemHeight = 0
+      ItemIndex = 0
+      Items.Strings = (
+        'localhost'
+      )
+      OnKeyDown = cbxComputersKeyDown
+      TabOrder = 0
+      Text = 'localhost'
+    end
+    object btnDelete: TButton
+      Left = 301
+      Height = 29
+      Top = 7
+      Width = 75
+      Caption = 'Delete'
+      OnClick = btnDeleteClick
+      TabOrder = 1
+    end
   end
-  object btnDelete: TButton
-    Left = 272
-    Height = 34
-    Top = 29
-    Width = 75
-    Caption = 'Delete'
-    OnClick = btnDeleteClick
+  object GroupBox2: TGroupBox
+    Left = 8
+    Height = 98
+    Top = 80
+    Width = 392
+    Caption = 'Link'
+    ClientHeight = 79
+    ClientWidth = 388
     TabOrder = 2
+    object mmoLink: TMemo
+      Left = 16
+      Height = 63
+      Top = 8
+      Width = 360
+      OnDblClick = mmoLinkDblClick
+      ReadOnly = True
+      TabOrder = 0
+    end
+  end
+  object GroupBox3: TGroupBox
+    Left = 8
+    Height = 98
+    Top = 184
+    Width = 392
+    Caption = 'Message'
+    ClientHeight = 79
+    ClientWidth = 388
+    TabOrder = 3
+    object mmoMessage: TMemo
+      Left = 16
+      Height = 63
+      Top = 8
+      Width = 360
+      OnDblClick = mmoMessageDblClick
+      OnMouseDown = mmoMessageMouseDown
+      TabOrder = 0
+    end
   end
 end

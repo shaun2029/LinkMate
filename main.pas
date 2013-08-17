@@ -6,24 +6,32 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  CommandServer, blcksock, Process, Clipbrd;
+  CommandServer, blcksock, Process, Clipbrd, lclintf;
 
 type
 
   { TfrmMain }
 
   TfrmMain = class(TForm)
-    btnSend: TButton;
     btnDelete: TButton;
+    btnSendLink: TButton;
     cbxComputers: TComboBox;
-    Label1: TLabel;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    mmoLink: TMemo;
+    mmoMessage: TMemo;
     procedure btnDeleteClick(Sender: TObject);
-    procedure btnSendClick(Sender: TObject);
+    procedure btnSendLinkClick(Sender: TObject);
     procedure cbxComputersKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure mmoLinkDblClick(Sender: TObject);
+    procedure mmoMessageDblClick(Sender: TObject);
+    procedure mmoMessageMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     { private declarations }
     FCommandServer: TCOMServer;
@@ -71,21 +79,39 @@ begin
   end;
 end;
 
-procedure TfrmMain.btnSendClick(Sender: TObject);
+procedure TfrmMain.mmoLinkDblClick(Sender: TObject);
+begin
+ mmoLink.Text := Clipboard.AsText;
+end;
+
+procedure TfrmMain.mmoMessageDblClick(Sender: TObject);
+begin
+  mmoMessage.Text := Clipboard.AsText;
+end;
+
+procedure TfrmMain.mmoMessageMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if (ssLeft in Shift) and (ssRight in Shift) then
+    mmoMessage.Lines.Clear;
+end;
+
+procedure TfrmMain.btnSendLinkClick(Sender: TObject);
 var
  Socket: TTCPBlockSocket;
  Host: string;
 begin
   if Trim(cbxComputers.Text) <> '' then
   begin
-    Host := cbxComputers.Items.Strings[cbxComputers.ItemIndex];
+    Host := cbxComputers.Text;
 
     Socket := TTCPBlockSocket.Create;
     Socket.Connect(Host, '28429');
 
     if Socket.LastError = 0 then
     begin
-      Socket.SendString('LINK:' + Clipboard.AsText + #10);
+      Socket.SendString(PROTE_LINK + StringReplace(mmoLink.Text, LineEnding, ' ', [rfReplaceAll]) + #10 + PROTE_END
+        + PROTE_MESSAGE + mmoMessage.Text + #10 + PROTE_END);
     end
     else
     begin
@@ -118,7 +144,13 @@ procedure TfrmMain.OnCommand;
 begin
   if FCommandServer.GetCommand = rcomLink then
   begin
-    Execute('firefox "' + FCommandServer.Link + '"');
+    if MessageDlg('LinkMate', 'Open link from: ' + FCommandServer.Sender + LineEnding
+      + 'Link: ' + Copy(FCommandServer.Link, 1 , 60) + LineEnding
+      + LineEnding + LineEnding + 'Message: ' + FCommandServer.Message,
+      mtConfirmation, [mbNo, mbYes], 0) = mrYes then
+    begin
+      OpenURL(FCommandServer.Link);
+    end;
   end;
 end;
 

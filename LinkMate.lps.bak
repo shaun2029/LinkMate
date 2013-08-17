@@ -3,12 +3,12 @@
   <ProjectSession>
     <Version Value="9"/>
     <BuildModes Active="Release"/>
-    <Units Count="11">
+    <Units Count="12">
       <Unit0>
         <Filename Value="LinkMate.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="LinkMate"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="7"/>
@@ -22,24 +22,19 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Main"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="44" Y="9"/>
+        <TopLine Value="80"/>
+        <CursorPos X="28" Y="98"/>
         <UsageCount Value="20"/>
-        <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="../LinkBuddy/commandserver.pas"/>
         <UnitName Value="commandserver"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="124"/>
         <CursorPos X="1" Y="144"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="../Clock2/commandserver.pas"/>
@@ -51,12 +46,10 @@
       </Unit3>
       <Unit4>
         <Filename Value="/usr/share/fpcsrc/2.6.0/rtl/objpas/classes/classesh.inc"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1457"/>
         <CursorPos X="3" Y="1473"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
@@ -70,12 +63,10 @@
       <Unit6>
         <Filename Value="../Clock2/clockmain.pas"/>
         <UnitName Value="ClockMain"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="329"/>
-        <CursorPos X="57" Y="354"/>
+        <TopLine Value="145"/>
+        <CursorPos X="34" Y="332"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit6>
       <Unit7>
         <Filename Value="../TCPClient/main.pas"/>
@@ -109,131 +100,22 @@
         <CursorPos X="133" Y="762"/>
         <UsageCount Value="10"/>
       </Unit10>
+      <Unit11>
+        <Filename Value="commandserver.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="commandserver"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit11>
     </Units>
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="30" HistoryIndex="29">
-      <Position1>
-        <Filename Value="../Clock2/clockmain.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position1>
-      <Position2>
-        <Filename Value="../Clock2/clockmain.pas"/>
-        <Caret Line="147" Column="12" TopLine="122"/>
-      </Position2>
-      <Position3>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="38" Column="66" TopLine="37"/>
-      </Position3>
-      <Position4>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="40" Column="66" TopLine="39"/>
-      </Position4>
-      <Position5>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="103" Column="1" TopLine="75"/>
-      </Position5>
-      <Position6>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="97" Column="19" TopLine="87"/>
-      </Position6>
-      <Position7>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="96" Column="12" TopLine="80"/>
-      </Position7>
-      <Position8>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="106" Column="76" TopLine="44"/>
-      </Position8>
-      <Position9>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="51" Column="1" TopLine="44"/>
-      </Position9>
-      <Position10>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="105" Column="54" TopLine="89"/>
-      </Position10>
-      <Position11>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="62" Column="1" TopLine="46"/>
-      </Position11>
-      <Position12>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="51" Column="1" TopLine="38"/>
-      </Position12>
-      <Position13>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="64" Column="144" TopLine="42"/>
-      </Position13>
-      <Position14>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="69" Column="1" TopLine="48"/>
-      </Position14>
-      <Position15>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="68" Column="1" TopLine="48"/>
-      </Position15>
-      <Position16>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="69" Column="1" TopLine="48"/>
-      </Position16>
-      <Position17>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="61" Column="134" TopLine="48"/>
-      </Position17>
-      <Position18>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="68" Column="1" TopLine="48"/>
-      </Position18>
-      <Position19>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="69" Column="1" TopLine="48"/>
-      </Position19>
-      <Position20>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="70" Column="1" TopLine="48"/>
-      </Position20>
-      <Position21>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="71" Column="1" TopLine="48"/>
-      </Position21>
-      <Position22>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="94" Column="45" TopLine="63"/>
-      </Position22>
-      <Position23>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="115" Column="1" TopLine="106"/>
-      </Position23>
-      <Position24>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="29" Column="87" TopLine="9"/>
-      </Position24>
-      <Position25>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="30" Column="87" TopLine="9"/>
-      </Position25>
-      <Position26>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="29" Column="87" TopLine="9"/>
-      </Position26>
-      <Position27>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="28" Column="87" TopLine="9"/>
-      </Position27>
-      <Position28>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="27" Column="87" TopLine="9"/>
-      </Position28>
-      <Position29>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="81" Column="29" TopLine="68"/>
-      </Position29>
-      <Position30>
-        <Filename Value="../LinkBuddy/main.pas"/>
-        <Caret Line="9" Column="43" TopLine="1"/>
-      </Position30>
-    </JumpHistory>
+    <JumpHistory Count="0" HistoryIndex="-1"/>
   </ProjectSession>
 </CONFIG>
