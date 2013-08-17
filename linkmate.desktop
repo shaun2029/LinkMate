@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=LinkMate
+Comment=Send web links to other devices
+Keywords=link;links;message;share;linkmate;
+Exec=linkmate
+Icon=linkmate
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=GNOME;GTK;Utility;WebBrowser;
+
