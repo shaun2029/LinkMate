@@ -1,3 +1,8 @@
+//
+// Copyright 2013 Shaun Simpson
+// shauns2029@gmail.com
+//
+
 unit Main;
 
 {$mode Delphi}
@@ -6,7 +11,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  CommandServer, blcksock, Process, Clipbrd, lclintf, AcceptDialog, Names;
+  CommandServer, blcksock, Process, Clipbrd, lclintf, AcceptDialog, Names, mDNS;
 
 type
 
@@ -105,13 +110,20 @@ procedure TfrmMain.btnSendLinkClick(Sender: TObject);
 var
  Socket: TTCPBlockSocket;
  Host: string;
+ DNS: TmDNSClient;
+ Address: string;
 begin
+  Host := cbxComputers.Text;
+
+  DNS := TmDNSClient.Create;
+  if DNS.Lookup(Host, Address) then
+    Host := Address;
+  DNS.Free;
+
   if Trim(cbxComputers.Text) <> '' then
   begin
     if Trim(mmoLink.Text) <> '' then
     begin
-      Host := cbxComputers.Text;
-
       Socket := TTCPBlockSocket.Create;
       Socket.Connect(Host, LINKMATE_PORT);
 

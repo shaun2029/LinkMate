@@ -1,3 +1,8 @@
+//
+// Copyright 2013 Shaun Simpson
+// shauns2029@gmail.com
+//
+
 unit AcceptDialog;
 
 {$mode objfpc}{$H+}

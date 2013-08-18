@@ -73,7 +73,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="6">
+    <Units Count="7">
       <Unit0>
         <Filename Value="LinkMate.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -110,6 +110,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Names"/>
       </Unit5>
+      <Unit6>
+        <Filename Value="mdns.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="mDNS"/>
+      </Unit6>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

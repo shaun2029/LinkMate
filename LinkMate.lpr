@@ -8,7 +8,7 @@ uses
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, Main, commandserver, UniqueInstanceRaw, blcksock, Dialogs,
-AcceptDialog, Names;
+AcceptDialog, Names, mDNS;
 
 {$R *.res}
 
