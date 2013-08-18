@@ -22,7 +22,7 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="LinkMate"/>
+            <Filename Value="linkmate"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -73,7 +73,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="3">
+    <Units Count="6">
       <Unit0>
         <Filename Value="LinkMate.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -92,12 +92,30 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="commandserver"/>
       </Unit2>
+      <Unit3>
+        <Filename Value="uniqueinstanceraw.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="UniqueInstanceRaw"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="acceptdialog.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAcceptDlg"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="AcceptDialog"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="names.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Names"/>
+      </Unit5>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="LinkMate"/>
+      <Filename Value="linkmate"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  CommandServer, blcksock, Process, Clipbrd, lclintf;
+  CommandServer, blcksock, Process, Clipbrd, lclintf, AcceptDialog, Names;
 
 type
 
@@ -36,12 +36,16 @@ type
     { private declarations }
     FCommandServer: TCOMServer;
     FConfigFilename: string;
+    FLocalSender: string;
 
     procedure Execute(Command: string);
     procedure OnCommand;
   public
     { public declarations }
   end;
+
+const
+  LINKMATE_PORT = '28429';
 
 var
   frmMain: TfrmMain;
@@ -56,6 +60,7 @@ procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   FConfigFilename := GetAppConfigFile(False);
   FCommandServer := TCOMServer.Create(28429);
+  FLocalSender := GetLocalUserName + '@' + GetLocalHostName;
   FCommandServer.OnCommand := OnCommand;
 end;
 
@@ -81,7 +86,7 @@ end;
 
 procedure TfrmMain.mmoLinkDblClick(Sender: TObject);
 begin
- mmoLink.Text := Clipboard.AsText;
+  mmoLink.Text := Clipboard.AsText;
 end;
 
 procedure TfrmMain.mmoMessageDblClick(Sender: TObject);
@@ -103,23 +108,28 @@ var
 begin
   if Trim(cbxComputers.Text) <> '' then
   begin
-    Host := cbxComputers.Text;
-
-    Socket := TTCPBlockSocket.Create;
-    Socket.Connect(Host, '28429');
-
-    if Socket.LastError = 0 then
+    if Trim(mmoLink.Text) <> '' then
     begin
-      Socket.SendString(PROTE_LINK + StringReplace(mmoLink.Text, LineEnding, ' ', [rfReplaceAll]) + #10 + PROTE_END
-        + PROTE_MESSAGE + mmoMessage.Text + #10 + PROTE_END);
+      Host := cbxComputers.Text;
+
+      Socket := TTCPBlockSocket.Create;
+      Socket.Connect(Host, LINKMATE_PORT);
+
+      if Socket.LastError = 0 then
+      begin
+        Socket.SendString(PROTE_LINK + StringReplace(mmoLink.Text, LineEnding, ' ', [rfReplaceAll]) + #10 + PROTE_END
+          + PROTE_SENDER + FLocalSender + #10 + PROTE_END
+          + PROTE_MESSAGE + mmoMessage.Text + #10 + PROTE_END);
+      end
+      else
+      begin
+        MessageDlg('LinkMate','Failed to send link to: ' + LineEnding + Host, mtError, [mbOK], 0);
+      end;
+
+      Socket.CloseSocket;
+      Socket.Free;
     end
-    else
-    begin
-      MessageDlg('LinkMate','Failed to send link to: ' + LineEnding + Host, mtError, [mbOK], 0);
-    end;
-
-    Socket.CloseSocket;
-    Socket.Free;
+    else MessageDlg('LinkMate','Cannot send empty link.', mtError, [mbOK], 0);
   end
   else MessageDlg('LinkMate','Please select a destination computer.', mtError, [mbOK], 0);
 end;
@@ -141,16 +151,39 @@ begin
 end;
 
 procedure TfrmMain.OnCommand;
+var
+ frmAcceptDlg: TfrmAcceptDlg;
 begin
   if FCommandServer.GetCommand = rcomLink then
   begin
-    if MessageDlg('LinkMate', 'Open link from: ' + FCommandServer.Sender + LineEnding
-      + 'Link: ' + Copy(FCommandServer.Link, 1 , 60) + LineEnding
-      + LineEnding + LineEnding + 'Message: ' + FCommandServer.Message,
-      mtConfirmation, [mbNo, mbYes], 0) = mrYes then
+    if FCommandServer.Message = '' then
     begin
-      OpenURL(FCommandServer.Link);
+      frmAcceptDlg := TfrmAcceptDlg.Create(Self);
+      frmAcceptDlg.Message := 'Open link from: ' + FCommandServer.RemoteSender + LineEnding
+        + 'Link: ' + Copy(FCommandServer.Link, 1 , 60);
+
+      if frmAcceptDlg.ShowModal = mrYes then
+      begin
+        OpenURL(FCommandServer.Link);
+      end;
+    end
+    else
+    begin
+      frmAcceptDlg := TfrmAcceptDlg.Create(Self);
+      frmAcceptDlg.Message := 'Open link from: ' + FCommandServer.RemoteSender + LineEnding
+        + 'Link: ' + Copy(FCommandServer.Link, 1 , 60) +  LineEnding + LineEnding + FCommandServer.Message;
+
+      if frmAcceptDlg.ShowModal = mrYes then
+      begin
+        OpenURL(FCommandServer.Link);
+      end;
     end;
+  end
+  else if FCommandServer.GetCommand = rcomSendClipboard then
+  begin
+    mmoLink.Text := Clipboard.AsText;
+    mmoMessage.Clear;
+    btnSendLink.Click;
   end;
 end;
 

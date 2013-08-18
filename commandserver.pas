@@ -17,7 +17,7 @@ uses
 
 type
 
-  TRemoteCommand = (rcomNone, rcomLink);
+  TRemoteCommand = (rcomNone, rcomLink, rcomSendClipboard);
 
   { TCOMServerThread }
 
@@ -27,9 +27,11 @@ type
     FPort: integer;
     FLink: string;
     FMessage: string;
-    FSender: string;
+    FRemoteSender: string;
 
     procedure AttendConnection(Socket: TTCPBlockSocket);
+    function GetProtContent(Title: string; LookForTitle: boolean; Socket: TTCPBlockSocket;
+      out Content: string): integer;
     procedure Log(Message: string);
   protected
     FCommand: TRemoteCommand;
@@ -41,7 +43,7 @@ type
     constructor Create(Port: integer);
     destructor Destroy; override;
   published
-    property Sender: string read FSender;
+    property RemoteSender: string read FRemoteSender;
     property Link: string read FLink;
     property Message: string read FMessage;
     property OnCommand: TThreadMethod read FOnCommand write FOnCommand;
@@ -52,7 +54,7 @@ type
     FCOMServerThread: TCOMServerThread;
     function GetLink: string;
     function GetMessage: string;
-    function GetSender: string;
+    function GetRemoteSender: string;
     procedure SetOnCommand(AValue: TThreadMethod);
   public
     function GetCommand: TRemoteCommand;
@@ -60,7 +62,7 @@ type
     constructor Create(Port: integer);
     destructor Destroy; override;
   published
-    property Sender: string read GetSender;
+    property RemoteSender: string read GetRemoteSender;
     property Link: string read GetLink;
     property Message: string read GetMessage;
     property OnCommand: TThreadMethod write SetOnCommand;
@@ -71,11 +73,17 @@ const
   PROT_MESSAGE = '{$|MESSAGE|}:';
   PROT_END = '{$|END|}:';
   PROT_OK = '{$|OK|}:';
+  PROT_ERROR = '{$|ERROR|}:';
+  PROT_SENDCLIPBOARD = '{$|SENDCLIPBOARD|}:';
+  PROT_SENDER = '{$|SENDER|}:';
 
   PROTE_LINK = PROT_LINK + #10;
   PROTE_MESSAGE = PROT_MESSAGE + #10;
   PROTE_END = PROT_END + #10;
   PROTE_OK = PROT_OK + #10;
+  PROTE_SENDCLIPBOARD = PROT_SENDCLIPBOARD + #10;
+  PROTE_SENDER = PROT_SENDER + #10;
+  PROTE_ERROR = PROT_ERROR + #10;
 
   TIMEOUT = 15000;
 
@@ -93,9 +101,9 @@ begin
   Result := FCOMServerThread.Message;
 end;
 
-function TCOMServer.GetSender: string;
+function TCOMServer.GetRemoteSender: string;
 begin
-  Result := FCOMServerThread.Sender;
+  Result := FCOMServerThread.RemoteSender;
 end;
 
 procedure TCOMServer.SetOnCommand(AValue: TThreadMethod);
@@ -167,62 +175,84 @@ begin
 
   if LastError = 0 then
   begin
-    if Buffer = PROT_LINK then
+    if Buffer = PROT_SENDCLIPBOARD then
     begin
       FCritical.Enter;
-
-      FCommand := rcomLink;
-      FLink := '';
-
-      if LastError = 0 then
-      begin
-        repeat
-          Buffer := Socket.RecvString(TIMEOUT);
-          if (Buffer <> PROT_END) then
-          begin
-            if FLink = '' then  FLink := FLink + Buffer
-            else FLink := FLink + ' ' + Buffer;
-          end;
-        until (LastError <> 0) or (Buffer = PROT_END);
-      end;
-
-      FMessage := '';
-
-      // Find message
-      repeat
-        Buffer := Socket.RecvString(TIMEOUT);
-      until (LastError <> 0) or (Buffer = PROT_MESSAGE);
-
-      // Get message
-      if LastError = 0 then
-      begin
-        if Buffer = PROT_MESSAGE then
-        begin
-          repeat
-            Buffer := Socket.RecvString(TIMEOUT);
-            if (Buffer <> PROT_END) then
-            begin
-              if FMessage = '' then  FMessage := FMessage + Buffer
-              else FMessage := FMessage + LineEnding + Buffer;
-            end;
-          until (LastError <> 0) or (Buffer = PROT_END);
-        end;
-      end;
-
-      FSender := Socket.GetRemoteSinIP;
-
+      FCommand := rcomSendClipboard;
       FCritical.Leave;
 
       if Assigned(FOnCommand) then Self.Synchronize(FOnCommand);
       Socket.SendString(PROT_OK);
+    end
+    else if Buffer = PROT_LINK then
+    begin
+      FCritical.Enter;
+
+      FCommand := rcomLink;
+
+      LastError := GetProtContent(PROT_LINK, False, Socket, FLink);
+
+      if LastError = 0 then
+        LastError := GetProtContent(PROT_SENDER, True, Socket, FRemoteSender);
+
+      if LastError = 0 then
+        LastError := GetProtContent(PROT_MESSAGE, True, Socket, FMessage);
+
+      FCritical.Leave;
+
+      if (LastError = 0) then
+      begin
+        if Assigned(FOnCommand) then
+          Self.Synchronize(FOnCommand);
+
+        Socket.SendString(PROT_OK);
+      end
+      else Socket.SendString(PROTE_ERROR);
     end
     else
     begin
       FCritical.Enter;
       FCommand := rcomNone;
       FCritical.Leave;
-      Socket.SendString(':ERROR' + #10);
+      Socket.SendString(PROTE_ERROR);
     end;
+  end;
+end;
+
+function TCOMServerThread.GetProtContent(Title: string; LookForTitle: boolean;
+  Socket: TTCPBlockSocket; out Content: string): integer;
+var
+  Buffer: string;
+begin
+  Content := '';
+  Result := 0;
+
+  // Find title
+  if LookForTitle then
+  begin
+    repeat
+      Buffer := Socket.RecvString(TIMEOUT);
+      Result := Socket.LastError;
+    until (Result <> 0) or (Buffer = Title);
+  end;
+
+  if Result = 0 then
+  begin
+    // Get content
+    if not LookForTitle or (Buffer = Title) then
+    begin
+      repeat
+        Buffer := Socket.RecvString(TIMEOUT);
+        Result := Socket.LastError;
+
+        if (Result = 0) and (Buffer <> PROT_END) then
+        begin
+          if Content = '' then  Content := FMessage + Buffer
+          else Content := Content + LineEnding + Buffer;
+        end;
+      until (Result <> 0) or (Buffer = PROT_END);
+    end
+    else Result := -1; // Title not found
   end;
 end;
 
@@ -230,7 +260,6 @@ function TCOMServerThread.GetCommnd: TRemoteCommand;
 begin
   FCritical.Enter;
   Result := FCommand;
-  FCommand := rcomNone;
   FCritical.Leave;
 end;
 
