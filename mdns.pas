@@ -121,23 +121,19 @@ begin
 
   if Socket.LastError = 0 then
   begin
-    // Check that the packet is the correct length.
-    if Packetlen = 34 + Length(Hostname) then
+    Result := True;
+
+    // Test that packet contains the expected host name.
+    for i := 0 to Length(HostName) - 1 do
     begin
-      Result := True;
-
-      // Test that packet contains the expected host name.
-      for i := 0 to Length(HostName) - 1 do
+      if HostName[i+1] = Char(Packet[35 + i]) then
       begin
-        if HostName[i+1] = Char(Packet[35 + i]) then
-        begin
-          Result := False;
-          Break;
-        end;
+        Result := False;
+        Break;
       end;
-
-      Address := Socket.GetRemoteSinIP;
     end;
+
+    Address := Socket.GetRemoteSinIP;
   end;
 
   FreeMem(Packet);
